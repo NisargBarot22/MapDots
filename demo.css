@@ -1,11 +1,39 @@
-
 #map {
-    width: 95%;
-    height: 450px;
+    width: 100%;
+    height: 750px;
     background: grey;
 }
 
 #panel {
     width: 100%;
     height: 400px;
+}
+
+
+.grid-container {
+    display: grid;
+    grid-template-columns: 50px 200px;
+    /* First column is 10px, second column is 100px */
+    /* grid-gap: 10px; */
+    padding: 0px;
+    position: fixed;
+    z-index: 1;
+    background-color: floralwhite;
+    box-shadow: 10px 10px 5px;
+}
+
+.grid-item {
+    /* background-color: #b3d9ff; */
+    
+
+    border: 1px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+}
+
+.address_desc{
+    font-size: 12px;
+    font-weight: 600;
 }

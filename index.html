@@ -16,17 +16,67 @@
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
   </head>
   <body id="markers-on-the-map">
-    <div class="page-header">
+    <!-- <div class="page-header">
         <h1>Circle on the Map</h1>
         <p>Display a map highlighting a circular region</p>
     </div>
-    <p>This example shows a circle with a radius of 1000 meters centered over a location in <b>New Delhi</b> <i>(28.6071°N, 77.2127°E)</i> and displayed on a moveable map.</p>
-    <div id="map"></div>
-    <h3>Code</h3>
+    <p>This example shows a circle with a radius of 1000 meters centered over a location in <b>New Delhi</b> <i>(28.6071°N, 77.2127°E)</i> and displayed on a moveable map.</p> -->
+    
+    <!-- <div style="display: block;">
+      <div style="display: flex; align-items: center;">
+        <div style="border: 2px solid red; height: 10px; width: 10px; background-color: red; margin-right: 10px;"></div><p> - Registered Company Address</p>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div style="border: 2px solid yellow; height: 10px; width: 10px; background-color: yellow; margin-right: 10px;"></div><p> - GSTIN Address</p>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <div style="border: 2px solid green; height: 10px; width: 10px; background-color: green; margin-right: 10px;"></div><p> - PF Establishment Address</p>
+      </div>
+    </div> -->
+    
+    <div class="grid-container">
+      <div class="grid-item">
+        <div style="border: 1.5px solid black; height: 10px; width: 10px; background-color: red; margin: 0px;"></div>
+      </div>
+      <div class="grid-item">
+        <p class="address_desc"> Registered Company Address</p>
+      </div>
+      <div class="grid-item">
+        <div style="border: 1.5px solid black; height: 10px; width: 10px; background-color: blue; margin: 0px;"></div>
+      </div>
+      <div class="grid-item">
+        <p class="address_desc"> Corporate Address</p>
+      </div>
+      <div class="grid-item">
+        <div style="border: 1.5px solid black; height: 10px; width: 10px; background-color: cyan; margin: 0px;"></div>
+      </div>
+      <div class="grid-item">
+        <p class="address_desc"> Company Website Address</p>
+      </div>
+      <div class="grid-item">
+        <div style="border: 1.5px solid black; height: 10px; width: 10px; background-color: yellow; margin: 0px;"></div>
+      </div>
+      <div class="grid-item">
+        <p class="address_desc"> GSTIN Address</p>
+      </div>
+      <div class="grid-item">
+        <div style="border: 1.5px solid black; height: 10px; width: 10px; background-color: green; margin: 0px;"></div>
+      </div>
+      <div class="grid-item">
+        <p class="address_desc"> PF Establishment Address</p>
+      </div>
+    </div>
+    
+    
+
+    <div id="map">
+
+    </div>
+    <!-- <h3>Code</h3>
     <p>A circle is created using the <code>H.map.Circle</code> class, 
       passing in the center point and radius. The look-and-feel of the circle 
       can be altered by adding the <code>style</code> parameter
-      </p>
+      </p> -->
     <script type="text/javascript" src='demo.js'></script>
   </body>
 </html>

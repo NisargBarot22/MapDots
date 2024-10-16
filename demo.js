@@ -5,28 +5,25 @@
  * @param  {H.Map} map      A HERE Map instance within the application
  * @param  {Number} lat     Latitude of the center of the circle
  * @param  {Number} lng     Longitude of the center of the circle
+ * @param {String} col      Color of the circle
  */
 
 
-function addCircleToMap(map, lat, lng){
+function addCircleToMap(map, lat, lng, col) {
   map.addObject(new H.map.Circle(
     // The central point of the circle
-    {lat:lat, lng:lng},
+    { lat: lat, lng: lng },
     // The radius of the circle in meters
-    15000,
+    55000,
     {
       style: {
         strokeColor: 'rgba(55, 85, 170, 0.6)', // Color of the perimeter
         lineWidth: 2,
-        fillColor: 'rgba(0, 128, 0, 0.7)'  // Color of the circle
+        fillColor: col  // Color of the circle
       }
     }
   ));
 }
-
-
-
-
 
 /**
  * Boilerplate map initialization code starts below:
@@ -42,8 +39,8 @@ var defaultLayers = platform.createDefaultLayers();
 //Step 2: initialize a map - this map is centered over New Delhi
 var map = new H.Map(document.getElementById('map'),
   defaultLayers.vector.normal.map, {
-  center: {lat:28.6071, lng:77.2127},
-  zoom: 13,
+  center: { lat: 28.6071, lng: 77.2127 },
+  zoom: 4,
   pixelRatio: window.devicePixelRatio || 1
 });
 // add a resize listener to make sure that the map occupies the whole container
@@ -62,135 +59,298 @@ var pincodeList;
 // Now use the map as required...
 // addCircleToMap(map);
 
-// addCircleToMap(map, result.lat, result.lng);
+// function createDictionary() {
+//   const workbook = 'matched_pincodes_lat_long.xlsx';  // replace with your file path
 
-function readExcelAndAddCircles() {
-  const filePath = 'output_pincode_lat_lng.xlsx'; // Path to your Excel file
-
-  fetch(filePath)
-    .then(response => response.arrayBuffer())
-    .then(data => {
-      const workbook = XLSX.read(data, { type: 'array' });
-
-      // Get the first worksheet
-      const firstSheetName = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheetName];
-
-      // Convert the worksheet to JSON
-      const jsonData = XLSX.utils.sheet_to_json(worksheet);
-
-      console.log("jsonData");
-      // Iterate over each row in the data
-      jsonData.map(row => 
-        // Extract the values from the columns (replace with your actual column names)
-        // const pincode = row.Pincode;
-        // const lat = row.Latitude;
-        // const lng = row.Longitude;
-
-        // console.log(row.Pincode)
-        // Check if all required values are present
-        
-        addCircleToMap(map, row.Latitude, row.Longitude)
-        
-      );
-    })
-    .catch(error => console.error('Error fetching or reading the Excel file:', error));
-}
-readExcelAndAddCircles();
-
-
-// function readExcel(){
-//   const filePath = 'MCA Master Data Fields.xlsx'; // Path to your Excel file
-
-//   fetch(filePath)
+//   fetch(workbook)
 //     .then(response => response.arrayBuffer())
 //     .then(data => {
 //       const workbook = XLSX.read(data, { type: 'array' });
+//       // Select the first worksheet
+//       const sheetName = workbook.SheetNames[0];
+//       const worksheet = workbook.Sheets[sheetName];
 
-//       // Get the first worksheet
-//       const firstSheetName = workbook.SheetNames[0];
-//       const worksheet = workbook.Sheets[firstSheetName];
-
-//       // Convert the worksheet to JSON
+//       // Convert the worksheet to JSON format
 //       const jsonData = XLSX.utils.sheet_to_json(worksheet);
-//       // const limitedData = jsonData.slice(0, );
 
-//       // Extract the Pincode column (replace 'Pincode' with the actual column name)
-//       pincodeList = jsonData.map(row => row.REGISTERED_OFFICE_PINCODE).filter(p => p !== undefined);
+//       const categoryDict = {};
+//       jsonData.forEach(row => {
+//         const category = row['Category'];  
+//         const latitude = row['Latitude']; 
+//         const longitude = row['Longitude'];
 
-//       // Print the extracted values
-//       console.log(pincodeList);
+//         if (category && latitude !== undefined && longitude !== undefined) {
+//           if (!categoryDict[category]) {
+//             categoryDict[category] = [];
+//           }
+//           categoryDict[category].push({ lat: latitude, lng: longitude });
+//         }
+//       });
 
-//       // Assuming `pincodeList` is already populated
-//       // fetchCoordinatesForAllPincodes(pincodeList);
+//       console.log(categoryDict);
+//       mapIterator(categoryDict);
 //     })
 //     .catch(error => console.error('Error fetching or reading the Excel file:', error));
 // }
+// createDictionary();
 
-// readExcel();
+// function mapIterator(categoryDict) {
+
+//   for (const [key, values] of Object.entries(categoryDict)) {
+//     values.forEach(({ lat, lng }) => {
+//       addCircleToMap(map, lat, lng);
+//     });
+//   }
+// }
 
 
+// PLOT A COMPANIES LOCATION BY THEIR MULTIPLE ADDREESS ACROSS INDIA
 
-// async function getLatLngForPincode(pincode, retries = 3) {
-//   const apiKey = 'MyKoML9Gluz5Va2EXndQBm7ECU1Xchr9K96px4ueNAA';
-//   const geocodeUrl = `https://geocode.search.hereapi.com/v1/geocode?q=${pincode}&apiKey=${apiKey}`;
+const GSTIN_Address = [
+  {
+    "state": "Andhra Pradesh",
+    "latitude": 16.094353,
+    "longitude": 79.613977
+  },
+  {
+    "state": "Arunachal Pradesh",
+    "latitude": 28.432865,
+    "longitude": 95.112255
+  },
+  {
+    "state": "Assam",
+    "latitude": 25.728705,
+    "longitude": 93.090127
+  },
+  {
+    "state": "Bihar",
+    "latitude": 24.916992,
+    "longitude": 85.037818
+  },
+  {
+    "state": "Chhattisgarh",
+    "latitude": 21.010766,
+    "longitude": 81.887299
+  },
+  {
+    "state": "Goa",
+    "latitude": 15.544042,
+    "longitude": 74.410802
+  },
+  {
+    "state": "Gujarat",
+    "latitude": 22.364082,
+    "longitude": 71.078407
+  },
+  {
+    "state": "Haryana",
+    "latitude": 28.960642,
+    "longitude": 75.618506
+  },
+  {
+    "state": "Himachal Pradesh",
+    "latitude": 30.679208,
+    "longitude": 77.259526
+  },
+  {
+    "state": "Jharkhand",
+    "latitude": 23.540951,
+    "longitude": 85.569362
+  },
+  {
+    "state": "Karnataka",
+    "latitude": 15.302889,
+    "longitude": 75.595973
+  },
+  {
+    "state": "Kerala",
+    "latitude": 10.489049,
+    "longitude": 76.654200
+  },
+  {
+    "state": "Madhya Pradesh",
+    "latitude": 23.390798,
+    "longitude": 78.531480
+  },
+  {
+    "state": "Maharashtra",
+    "latitude": 19.447163,
+    "longitude": 75.770697
+  },
+  {
+    "state": "Manipur",
+    "latitude": 24.404181,
+    "longitude": 93.905849
+  },
+  {
+    "state": "Meghalaya",
+    "latitude": 25.219829,
+    "longitude": 91.445222
+  },
+  {
+    "state": "Mizoram",
+    "latitude": 23.478886,
+    "longitude": 92.485785
+  },
+  {
+    "state": "Nagaland",
+    "latitude": 25.789523,
+    "longitude": 95.020613
+  },
+  {
+    "state": "Odisha",
+    "latitude": 21.163793,
+    "longitude": 85.377859
+  },
+  {
+    "state": "Punjab",
+    "latitude": 31.347007,
+    "longitude": 75.784788
+  }
+]
 
-//   try {
-//     const response = await fetch(geocodeUrl);
+const PF_Establishment_Address = [
+  // {
+  //     "state": "Andhra Pradesh",
+  //     "latitude": 15.9129,
+  //     "longitude": 79.7400
+  // },
+  // {
+  //     "state": "Karnataka",
+  //     "latitude": 15.3173,
+  //     "longitude": 75.7139
+  // },
+  // {
+  //     "state": "Maharashtra",
+  //     "latitude": 19.7515,
+  //     "longitude": 75.7139
+  // },
+  {
+      "state": "West Bengal",
+      "latitude": 22.9868,
+      "longitude": 87.8550
+  },
+  {
+      "state": "Rajasthan",
+      "latitude": 27.0238,
+      "longitude": 74.2179
+  },
+  {
+      "state": "Uttar Pradesh",
+      "latitude": 26.8467,
+      "longitude": 80.9462
+  },
+  {
+      "state": "Tamil Nadu",
+      "latitude": 11.1271,
+      "longitude": 78.6569
+  },
+  {
+      "state": "Telangana",
+      "latitude": 18.1124,
+      "longitude": 79.0193
+  },
+  {
+      "state": "Uttarakhand",
+      "latitude": 30.0668,
+      "longitude": 79.0193
+  },
+  {
+      "state": "Sikkim",
+      "latitude": 27.5330,
+      "longitude": 88.5122
+  },
+  // {
+  //     "state": "Meghalaya",
+  //     "latitude": 25.4670,
+  //     "longitude": 91.3662
+  // },
+  {
+      "state": "Tripura",
+      "latitude": 23.9408,
+      "longitude": 91.9882
+  },
+  {
+      "state": "Mizoram",
+      "latitude": 23.1645,
+      "longitude": 92.9376
+  },
+  {
+      "state": "Jammu and Kashmir",
+      "latitude": 33.7782,
+      "longitude": 76.5762
+  },
+  {
+      "state": "Andaman and Nicobar Islands",
+      "latitude": 11.7401,
+      "longitude": 92.6586
+  }
+]
 
-//     if (response.status === 429) {
-//       console.warn(`Rate limit exceeded for pincode ${pincode}. Retrying...`);
-      
-//       // Exponential backoff delay: wait for (2^retry) seconds
-//       await new Promise(resolve => setTimeout(resolve, Math.pow(2, 3 - retries) * 1000));
+const registered_office_address = [
+  {
+    "latitude": 18.9264,
+    "longitude": 72.8246
+  }
+]
 
-//       if (retries > 0) {
-//         return await getLatLngForPincode(pincode, retries - 1);
-//       } else {
-//         console.error(`Max retries reached for pincode: ${pincode}`);
-//         return null;
+const corporate_office_address = [
+  {
+    "latitude": 28.6304,
+    "longitude": 77.2177
+  }
+]
+
+const company_website_address = [
+  {
+    "latitude": 18.5196,
+    "longitude": 73.8553
+  }
+]
+
+function multipleTypeOfAddressesForASingleCompany(){
+  addCircleToMap(map, registered_office_address[0].latitude, registered_office_address[0].longitude, 'rgba(255, 0, 0, 0.7)');
+  addCircleToMap(map, corporate_office_address[0].latitude, corporate_office_address[0].longitude, 'rgba(0, 255, 255, 0.7)');
+  addCircleToMap(map, company_website_address[0].latitude, company_website_address[0].longitude, 'rgba(0, 0, 255, 0.7)');
+
+  GSTIN_Address.forEach((e) => {
+    addCircleToMap(map, e.latitude, e.longitude, 'rgba(255, 255, 0, 0.7)');
+  })
+
+  PF_Establishment_Address.forEach((e) => {
+    addCircleToMap(map, e.latitude, e.longitude, 'rgba(0, 255, 0, 0.7)');
+  })
+
+}
+
+multipleTypeOfAddressesForASingleCompany();
+
+// function plotMultipleAddressesForACompany() {
+//   const workbook = 'matched_pincodes_lat_long.xlsx';
+//   fetch(workbook)
+//     .then(response => response.arrayBuffer())
+//     .then(data => {
+//       const workbook = XLSX.read(data, { type: 'array' });
+//       // Select the first worksheet
+//       const sheetName = workbook.SheetNames[0];
+//       const worksheet = workbook.Sheets[sheetName];
+
+//       // Convert the worksheet to JSON format
+//       const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+//       console.log(jsonData[0]);
+//       addCircleToMap(map, jsonData[0].Latitude, jsonData[0].Longitude, 'rgba(0, 255, 0, 0.7)');
+
+
+//       for (var i = 1; i < 31; i++) {
+//         if (i < 12) addCircleToMap(map, jsonData[i].Latitude, jsonData[i].Longitude, 'rgba(255, 0, 0, 0.7)');
+//         else if (i > 11 && i < 21) addCircleToMap(map, jsonData[i].Latitude, jsonData[i].Longitude, 'rgba(0, 0, 255, 0.7)');
+//         else if (i > 21) addCircleToMap(map, jsonData[i].Latitude, jsonData[i].Longitude, 'rgba(255, 255, 0, 0.7)');
 //       }
-//     }
-
-//     const data = await response.json();
-
-//     if (data.items && data.items.length > 0) {
-//       const { lat, lng } = data.items[0].position;
-//       return { lat, lng };
-//     } else {
-//       console.warn(`No coordinates found for pincode: ${pincode}`);
-//       return null;
-//     }
-//   } catch (error) {
-//     console.error(`Error fetching data for pincode ${pincode}:`, error);
-//     return null;
-//   }
+//     })
+//     .catch((err) => {
+//       console.log("Error", err);
+//     })
 // }
 
-// // Function to introduce a delay between requests
-// function delay(ms) {
-//   return new Promise(resolve => setTimeout(resolve, ms));
-// }
-
-// // Modified function to fetch lat, lng for all pincodes in the list with delays
-// async function fetchCoordinatesForAllPincodes(pincodeList) {
-//   const coordinates = [];
-
-//   for (const pincode of pincodeList) {
-//     // Wait for a delay (e.g., 1 second) before the next request
-//     await delay(1000); 
-
-//     const result = await getLatLngForPincode(pincode);
-//     if (result) {
-//       coordinates.push({ pincode, lat: result.lat, lng: result.lng });
-//       addCircleToMap(map, result.lat, result.lng);
-//     }
-//   }
-
-//   // Log the final coordinates list
-//   console.log(coordinates);
-//   return coordinates;
-// }
-
-
-
+// plotMultipleAddressesForACompany();
