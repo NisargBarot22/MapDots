@@ -9,12 +9,14 @@
  */
 
 
-function addCircleToMap(map, lat, lng, col) {
+function addCircleToMap(map, lat, lng, col = "rgba(255, 255, 0, 0.7)", radius = 55000) {
+  // console.log("here");
   map.addObject(new H.map.Circle(
     // The central point of the circle
     { lat: lat, lng: lng },
     // The radius of the circle in meters
-    55000,
+    // 55000,
+    radius,
     {
       style: {
         strokeColor: 'rgba(55, 85, 170, 0.6)', // Color of the perimeter
@@ -57,51 +59,52 @@ var ui = H.ui.UI.createDefault(map, defaultLayers);
 var pincodeList;
 
 // Now use the map as required...
-// addCircleToMap(map);
+// addCircleToMap(map, 28.6071, 77.2127);
+// addCircleToMap(map, 28.6071, 76.2127, 'rgba(255, 0, 0, 0.7)');
 
-// function createDictionary() {
-//   const workbook = 'matched_pincodes_lat_long.xlsx';  // replace with your file path
+function createDictionary() {
+  const workbook = 'matched_pincodes_lat_long.xlsx';  // replace with your file path
 
-//   fetch(workbook)
-//     .then(response => response.arrayBuffer())
-//     .then(data => {
-//       const workbook = XLSX.read(data, { type: 'array' });
-//       // Select the first worksheet
-//       const sheetName = workbook.SheetNames[0];
-//       const worksheet = workbook.Sheets[sheetName];
+  fetch(workbook)
+    .then(response => response.arrayBuffer())
+    .then(data => {
+      const workbook = XLSX.read(data, { type: 'array' });
+      // Select the first worksheet
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
 
-//       // Convert the worksheet to JSON format
-//       const jsonData = XLSX.utils.sheet_to_json(worksheet);
+      // Convert the worksheet to JSON format
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
 
-//       const categoryDict = {};
-//       jsonData.forEach(row => {
-//         const category = row['Category'];  
-//         const latitude = row['Latitude']; 
-//         const longitude = row['Longitude'];
+      const categoryDict = {};
+      jsonData.forEach(row => {
+        const category = row['Category'];
+        const latitude = row['Latitude'];
+        const longitude = row['Longitude'];
 
-//         if (category && latitude !== undefined && longitude !== undefined) {
-//           if (!categoryDict[category]) {
-//             categoryDict[category] = [];
-//           }
-//           categoryDict[category].push({ lat: latitude, lng: longitude });
-//         }
-//       });
+        if (category && latitude !== undefined && longitude !== undefined) {
+          if (!categoryDict[category]) {
+            categoryDict[category] = [];
+          }
+          categoryDict[category].push({ lat: latitude, lng: longitude });
+        }
+      });
 
-//       console.log(categoryDict);
-//       mapIterator(categoryDict);
-//     })
-//     .catch(error => console.error('Error fetching or reading the Excel file:', error));
-// }
+      console.log(categoryDict);
+      mapIterator(categoryDict);
+    })
+    .catch(error => console.error('Error fetching or reading the Excel file:', error));
+}
 // createDictionary();
 
-// function mapIterator(categoryDict) {
+function mapIterator(categoryDict) {
 
-//   for (const [key, values] of Object.entries(categoryDict)) {
-//     values.forEach(({ lat, lng }) => {
-//       addCircleToMap(map, lat, lng);
-//     });
-//   }
-// }
+  for (const [key, values] of Object.entries(categoryDict)) {
+    values.forEach(({ lat, lng }) => {
+      addCircleToMap(map, lat, lng);
+    });
+  }
+}
 
 
 // PLOT A COMPANIES LOCATION BY THEIR MULTIPLE ADDREESS ACROSS INDIA
@@ -226,39 +229,39 @@ const PF_Establishment_Address = [
   //     "longitude": 75.7139
   // },
   {
-      "state": "West Bengal",
-      "latitude": 22.9868,
-      "longitude": 87.8550
+    "state": "West Bengal",
+    "latitude": 22.9868,
+    "longitude": 87.8550
   },
   {
-      "state": "Rajasthan",
-      "latitude": 27.0238,
-      "longitude": 74.2179
+    "state": "Rajasthan",
+    "latitude": 27.0238,
+    "longitude": 74.2179
   },
   {
-      "state": "Uttar Pradesh",
-      "latitude": 26.8467,
-      "longitude": 80.9462
+    "state": "Uttar Pradesh",
+    "latitude": 26.8467,
+    "longitude": 80.9462
   },
   {
-      "state": "Tamil Nadu",
-      "latitude": 11.1271,
-      "longitude": 78.6569
+    "state": "Tamil Nadu",
+    "latitude": 11.1271,
+    "longitude": 78.6569
   },
   {
-      "state": "Telangana",
-      "latitude": 18.1124,
-      "longitude": 79.0193
+    "state": "Telangana",
+    "latitude": 18.1124,
+    "longitude": 79.0193
   },
   {
-      "state": "Uttarakhand",
-      "latitude": 30.0668,
-      "longitude": 79.0193
+    "state": "Uttarakhand",
+    "latitude": 30.0668,
+    "longitude": 79.0193
   },
   {
-      "state": "Sikkim",
-      "latitude": 27.5330,
-      "longitude": 88.5122
+    "state": "Sikkim",
+    "latitude": 27.5330,
+    "longitude": 88.5122
   },
   // {
   //     "state": "Meghalaya",
@@ -266,24 +269,24 @@ const PF_Establishment_Address = [
   //     "longitude": 91.3662
   // },
   {
-      "state": "Tripura",
-      "latitude": 23.9408,
-      "longitude": 91.9882
+    "state": "Tripura",
+    "latitude": 23.9408,
+    "longitude": 91.9882
   },
   {
-      "state": "Mizoram",
-      "latitude": 23.1645,
-      "longitude": 92.9376
+    "state": "Mizoram",
+    "latitude": 23.1645,
+    "longitude": 92.9376
   },
   {
-      "state": "Jammu and Kashmir",
-      "latitude": 33.7782,
-      "longitude": 76.5762
+    "state": "Jammu and Kashmir",
+    "latitude": 33.7782,
+    "longitude": 76.5762
   },
   {
-      "state": "Andaman and Nicobar Islands",
-      "latitude": 11.7401,
-      "longitude": 92.6586
+    "state": "Andaman and Nicobar Islands",
+    "latitude": 11.7401,
+    "longitude": 92.6586
   }
 ]
 
@@ -308,7 +311,7 @@ const company_website_address = [
   }
 ]
 
-function multipleTypeOfAddressesForASingleCompany(){
+function multipleTypeOfAddressesForASingleCompany() {
   addCircleToMap(map, registered_office_address[0].latitude, registered_office_address[0].longitude, 'rgba(255, 0, 0, 0.7)');
   addCircleToMap(map, corporate_office_address[0].latitude, corporate_office_address[0].longitude, 'rgba(0, 255, 255, 0.7)');
   addCircleToMap(map, company_website_address[0].latitude, company_website_address[0].longitude, 'rgba(0, 0, 255, 0.7)');
@@ -325,32 +328,77 @@ function multipleTypeOfAddressesForASingleCompany(){
 
 multipleTypeOfAddressesForASingleCompany();
 
-// function plotMultipleAddressesForACompany() {
-//   const workbook = 'matched_pincodes_lat_long.xlsx';
-//   fetch(workbook)
-//     .then(response => response.arrayBuffer())
-//     .then(data => {
-//       const workbook = XLSX.read(data, { type: 'array' });
-//       // Select the first worksheet
-//       const sheetName = workbook.SheetNames[0];
-//       const worksheet = workbook.Sheets[sheetName];
 
-//       // Convert the worksheet to JSON format
-//       const jsonData = XLSX.utils.sheet_to_json(worksheet);
+//3rd Map
+function createPincodeDictionary() {
+  const workbook = 'matched_pincodes_lat_long.xlsx';  // replace with your file path
 
-//       console.log(jsonData[0]);
-//       addCircleToMap(map, jsonData[0].Latitude, jsonData[0].Longitude, 'rgba(0, 255, 0, 0.7)');
+  fetch(workbook)
+    .then(response => response.arrayBuffer())
+    .then(data => {
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+
+      const jsonData = XLSX.utils.sheet_to_json(worksheet);
+
+      const pincodeMap = new Map();
+
+      jsonData.forEach(row => {
+        const latitude = row['Latitude'];
+        const longitude = row['Longitude'];
+
+        if (latitude && longitude && latitude !== undefined && longitude !== undefined) {
+          let matchedKey = null;
+
+          for (const [key, values] of pincodeMap) {
+            const [keyLat, keyLng] = key.split(',').map(Number);
+
+            if (
+              (latitude > keyLat - 0.5 && latitude < keyLat + 0.5 ) &&
+              (longitude > keyLng - 0.5 && longitude < keyLng + 0.5 )
+            ) {
+              matchedKey = key;
+              break;
+            }
+          }
+
+          if (matchedKey) {
+            pincodeMap.get(matchedKey).push({ lat: latitude, lng: longitude });
+          } else {
+            const newKey = `${latitude},${longitude}`;
+            pincodeMap.set(newKey, [{ lat: latitude, lng: longitude }]);
+          }
+        }
+      });
+
+      const totalKeys = pincodeMap.size;
+      console.log(totalKeys);
+      console.log(pincodeMap);
+
+      map_Iterator(pincodeMap);
 
 
-//       for (var i = 1; i < 31; i++) {
-//         if (i < 12) addCircleToMap(map, jsonData[i].Latitude, jsonData[i].Longitude, 'rgba(255, 0, 0, 0.7)');
-//         else if (i > 11 && i < 21) addCircleToMap(map, jsonData[i].Latitude, jsonData[i].Longitude, 'rgba(0, 0, 255, 0.7)');
-//         else if (i > 21) addCircleToMap(map, jsonData[i].Latitude, jsonData[i].Longitude, 'rgba(255, 255, 0, 0.7)');
-//       }
-//     })
-//     .catch((err) => {
-//       console.log("Error", err);
-//     })
-// }
+    });
+}
+// createPincodeDictionary();
 
-// plotMultipleAddressesForACompany();
+function map_Iterator(pincodeMap) {
+  for (const [key, values] of pincodeMap) {
+    const { lat, lng } = values[0];
+    var radius = 10000;
+    if(values.length < 10000 && values.length >= 1000){
+      radius = values.length;
+      addCircleToMap(map, lat, lng, 'rgba(255, 255, 0, 0.7)', radius * 10);
+    } 
+    else if(values.length < 1000){
+      radius = values.length * 10;
+      if(values.length > 500) addCircleToMap(map, lat, lng, 'rgba(255, 165, 0, 1)', radius * 10);
+      else addCircleToMap(map, lat, lng, 'rgba(255, 165, 0, 0.3)', radius * 10);
+    } 
+    else {
+      radius = values.length;
+      addCircleToMap(map, lat, lng, 'rgba(255, 0, 0, 0.7)', radius * 10);
+    } 
+  }
+}
